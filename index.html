@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="root" class='overflow-hidden flex justify-center items-center h-screen bg-gradient-to-b from-[#8BC6EC] to-[#9599E2]'>
+        <div id="loading" class="hidden absolute flex items-center justify-center bg-sky-700/75 h-screen w-full z-10">
+            <span class="loader"></span>
+        </div>
+        <div id="server-status" class='overflow-hidden absolute top-0 right-0 w-max flex flex-col p-2 z-1 pl-5'>
+            <!-- <p class='bg-white text-gray-500 rounded-lg p-2 m-1 animate-slideIn opacity-0'><i class="fa-solid fa-circle text-green-400"></i>&nbsp; Backend Online</p>
+            <p class='bg-white text-gray-500 rounded-lg p-2 m-1 animate-slideIn opacity-0'><i class="fa-solid fa-circle text-green-400"></i>&nbsp; Database Online</p>
+            <p class='bg-white text-gray-500 rounded-lg p-2 m-1 animate-slideIn opacity-0'><i class="fa-solid fa-circle text-red-400"></i>&nbsp; Backend Offline</p>
+            <p class='bg-white text-gray-500 rounded-lg p-2 m-1 animate-slideIn opacity-0'><i class="fa-solid fa-circle text-red-400"></i>&nbsp; Database Offline</p> -->
+        </div>
+        <div class='h-full w-full flex-col justify-center items-center'>
+            <img src="assets/logo.png" class= 'h-1/5 w-1/4 object-cover mx-auto my-2 ' />
+            <form id="auth-form" class='bg-white rounded-lg w-1/3 h-3/4 px-16 py-12 flex flex-col justify-between m-auto'>
+                <h2 id="login-title" class='text-gray-400 text-4xl text-center font-bold my-2'>Login</h2>
+                <div id="form-inputs" class='flex flex-col justify-around my-4'>
+                    <!-- <input ref={nameRef} type="text" placeholder='Name' class='border-2 border-gray-300 rounded-lg w-full my-4 p-3' required/> -->
+                    <input id="email" type="text" placeholder='Email' class='border-2 border-gray-300 rounded-lg w-full my-4 p-3' required/>
+                    <input id="password" type="password" placeholder='Password' class='border-2 border-gray-300 rounded-lg w-full my-4 p-3' required/>
+                </div>
+                <div class='flex flex-col w-full justify-center items-center'>
+                    <button id="form-btn" class='bg-sky-300 hover:bg-sky-500 text-white rounded-lg w-2/4 px-10 py-3 cursor-pointer' type='submit'>Login</button>
+                    <p id="form-toggle" class='text-sky-300 text-center p-3'>Don't have an account? <button type="button" id="form-toggle-btn" class='hover:text-sky-500 underline cursor-pointer'>Signup</button></p>
+                </div>
+                <!-- <div class='flex flex-col w-full justify-center items-center'>
+                    <button class='bg-sky-300 hover:bg-sky-500 text-white rounded-lg w-2/4 px-10 py-3 cursor-pointer'type='submit'>SignUp</button>
+                    <p class='text-sky-300 text-center p-3'>Already have and account? <a onClick={toggleLogin} class='hover:text-sky-500 underline cursor-pointer'>Login</a></p>
+                </div> -->
+            </form>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/285b092fe9.js" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+</body>
+</html>
