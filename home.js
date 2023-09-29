@@ -50,7 +50,7 @@ const initialize = async () => {
       headers: {
           'Content-Type': 'application/json'
       },
-      body: JSON.stringify({name: userData.name})
+      body: JSON.stringify({_id: userData._id})
     });
 
     const imagesData = await images.json();
@@ -60,7 +60,7 @@ const initialize = async () => {
             <div class='z-1 my-10 mx-12 rounded-lg m-1 h-80 bg-white w-1/4 max-h-1000 flex flex-col text-center scale-110 hover:scale-125 transition-all ease-out p-2' key={image._id}>
                 <img src=${image.img} class='object-cover rounded-lg h-full w-full' />
             </div>`
-        });
+        }).join('');
 
     console.log(imagesData);
 
@@ -93,7 +93,7 @@ const addImage = async () => {
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({img: link ,user: curUser.name})
+          body: JSON.stringify({img: link ,user: curUser._id})
         })
         .then(res => res.json())
         .then(data => {

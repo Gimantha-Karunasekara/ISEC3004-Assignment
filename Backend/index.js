@@ -3,54 +3,13 @@ const mongoSanitize = require('express-mongo-sanitize');
 const jwt = require('jsonwebtoken');
 mongoose.connect('mongodb+srv://gimantha2003:tx69kuZgdNx40SOO@cluster0.nx75kk0.mongodb.net/ISEC3004?retryWrites=true&w=majority');
  
-// Schema for users of app
-const images = [
-    {
-        name: "Post 1",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ac massa ultricies, hendrerit nisl ultrices, laoreet orci. Sed placerat, mauris sit amet vestibulum dapibus, erat arcu posuere ex, quis egestas enim turpis nec tortor. Nullam sit amet lacinia eros.",
-        user: "Gimantha",
-        img: "https://images.unsplash.com/photo-1682687982183-c2937a74257c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2942&q=80"
-    },
-    {
-        name: "Post 2",
-        desc: "This is a test post",
-        user: "Gimantha",
-        img: "https://images.unsplash.com/photo-1682687982183-c2937a74257c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2942&q=80"
-    },
-    {
-        name: "Post 3",
-        desc: "This is a test post",
-        user : "Gimantha",
-        img: "https://images.unsplash.com/photo-1682687982183-c2937a74257c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2942&q=80"
-    },
-    {
-        name: "Post 4",
-        desc: "This is a test post",
-        user : "Gimantha",
-        img: "https://images.unsplash.com/photo-1682687982183-c2937a74257c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2942&q=80"
-    },
-    {
-        name: "Post 5",
-        desc: "This is a test post",
-        user : "Vinuk",
-        img: "https://images.unsplash.com/photo-1683009427619-a1a11b799e05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80"
-    },
 
-];
 
 const ImageSchema = new mongoose.Schema({
     user: {
         type: String,
         required: true,
     },
-    // name: {
-    //     type: String,
-    //     required: true,
-    // },
-    // desc: {
-    //     type: String,
-    //     required: true,
-    // },
     img: {
         type: String,
         required: true,
@@ -84,7 +43,7 @@ Image.createIndexes();
 const express = require('express');
 const app = express();
 const cors = require("cors");
-console.log("App listen at port 5000");
+console.log("Backend listen at port 5000");
 app.use(express.json());
 app.use(cors());
 
@@ -96,11 +55,6 @@ app.use(cors());
 //     }),
 //   );
 
-app.use(express.static('public'));
-
-//Serves all the request which includes /images in the url from Images folder
-app.use('/images', express.static(__dirname + '/Images'));
-
 app.get("/", (req, resp) => {
     let dbStatus = false;
     if (mongoose.connection.readyState === 1) {
@@ -110,7 +64,6 @@ app.get("/", (req, resp) => {
     resp.json(status);
     
 });
-
 
 app.post("/signup", async (req, resp) => {
     try {
@@ -130,7 +83,6 @@ app.post("/signup", async (req, resp) => {
 
 app.post("/login", async (req, resp) => {
     const {email, password} = req.body;
-    console.log(email, password);
     try {
         const user = await User.findOne({email: email, password:password}).exec();
 
@@ -162,6 +114,34 @@ app.get("/user", async (req, resp) => {
     }
 });
 
+app.get("/users", async (req, resp) => {
+    try {
+        const token = req.header('auth-token');
+        jwt.verify(token, "thisIsASecretKey");
+        const users = await User.find({}).exec();
+        return resp.json(users);
+    } catch (e) {
+        console.log(e);
+        resp.status(400).json({err: "Invalid email or password"});
+    }
+});
+
+app.delete("/deleteUser", async (req, resp) => {
+
+    try {
+        const token = req.header('auth-token');
+        jwt.verify(token, "thisIsASecretKey");
+        await User.deleteOne({_id: req.body.id}).exec();
+        await Image.deleteMany({user: req.body.id}).exec();
+        resp.status(200).send({result: "success"});
+    } catch (error) {
+        resp.status(500).send(error);
+        console.log(error); 
+    }
+    
+});
+
+
 
 
 app.post("/create", async (req, resp) => {
@@ -182,7 +162,7 @@ app.post("/create", async (req, resp) => {
 app.post("/images", async (req, resp) => {
 
     try {
-        const posts = await Image.find({user: req.body.name}).exec();
+        const posts = await Image.find({user: req.body._id}).exec();
         return resp.json(posts);
     } catch (e) {
         console.log(e);
@@ -224,8 +204,8 @@ app.get("/clear", async (req, resp) => {
 
 app.get("/hack", async (req, resp) => {
     try {
-        console.log(req.query.cookie);
-        resp.send("Hacked");
+        resp.send(null);
+        console.log("Payload triggered\nResponse: " + req.query.cookie);
     } catch (e) {
         console.log(e);
         resp.send("Something Went Wrong");

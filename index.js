@@ -1,10 +1,12 @@
 
 const getStatus = async () =>{
+
+    const status = document.getElementById('server-status');
+
     await fetch('http://localhost:5000/')
         .then(res => res.json())
         .then(data => {
             if (data.backend === true) {
-                const status = document.getElementById('server-status');
 
                 const serverStatus = document.createElement('p');
                 serverStatus.innerHTML = '<i class="fa-solid fa-circle text-green-400"></i>&nbsp; Backend Online';
@@ -13,7 +15,6 @@ const getStatus = async () =>{
             }
             else
             {
-                const status = document.getElementById('server-status');
 
                 const serverStatus = document.createElement('p');
                 serverStatus.innerHTML = '<i class="fa-solid fa-circle text-red-400"></i>&nbsp; Backend Offline';
@@ -23,7 +24,6 @@ const getStatus = async () =>{
 
 
             if (data.db === true) {
-                const status = document.getElementById('server-status');
 
                 const dbStatus = document.createElement('p');
                 dbStatus.innerHTML = '<i class="fa-solid fa-circle text-green-400"></i>&nbsp; Database Online';
@@ -32,7 +32,6 @@ const getStatus = async () =>{
             }
             else
             {
-                const status = document.getElementById('server-status');
 
                 const dbStatus = document.createElement('p');
                 dbStatus.innerHTML = '<i class="fa-solid fa-circle text-red-400"></i>&nbsp; Database Offline';
@@ -42,18 +41,30 @@ const getStatus = async () =>{
         })
         .catch(err => {
             console.log(err);
+
+            const serverStatus = document.createElement('p');
+            serverStatus.innerHTML = '<i class="fa-solid fa-circle text-red-400"></i>&nbsp; Backend Offline';
+            serverStatus.classList.add('bg-white', 'text-gray-500', 'rounded-lg', 'p-2', 'm-1', 'animate-slideIn', 'opacity-0');
+            status.appendChild(serverStatus);
+
+            const dbStatus = document.createElement('p');
+            dbStatus.innerHTML = '<i class="fa-solid fa-circle text-red-400"></i>&nbsp; Database Offline';
+            dbStatus.classList.add('bg-white', 'text-gray-500', 'rounded-lg', 'p-2', 'm-1', 'animate-slideIn', 'opacity-0');
+            status.appendChild(dbStatus);
+
         })
 };
 
 getStatus();
 
-const token = get_cookie('token');
-
-function get_cookie(cookie_name) {
+const get_cookie = (cookie_name) => {
     const value = "; " + document.cookie;
     const parts = value.split("; " + cookie_name + "=");
     if (parts.length === 2) return parts.pop().split(";").shift();
   }
+
+const token = get_cookie('token');
+
 
 if (token) {
     window.location.href = 'http://localhost:5500/home.html';
