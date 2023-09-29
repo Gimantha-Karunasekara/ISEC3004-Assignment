@@ -1,5 +1,4 @@
 # ISEC3004-Assignment
-<br>
 
 ## Introduction<br>
 
@@ -8,7 +7,8 @@ This is a repository for ISEC3004 Assignment. The assignment focuses on demostra
 #### index.html - Main page for the website<br>
 #### Backend - Backend Server
 This backend acts as a server for the website. It is written in NodeJS and ExpressJS. It uses MongoDB as the database.<br>
-To run the backend server, navigate to the directory and run the following commands:<be>
+To run the backend server, navigate to the directory and run the following commands:<br>
+<b>Make sure to replace the mongoose.connect the URL with your mongoDB URL.<b>
   
 ```console
 npm install
@@ -42,7 +42,7 @@ nodemon index.js
 
 In the above scenarios, {"$ne": null} means <b>not equal to null<b>.
 
-#### XSS - XSS Attack<br>
+#### XSS - XSS Attack <br>
 When a user account is created with a XSS payload as the user such as: <br>
 
 ```console 
