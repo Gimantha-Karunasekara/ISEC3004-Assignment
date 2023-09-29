@@ -10,15 +10,19 @@ Backend - Backend Server<br>
 This backend acts as a server for the website. It is written in NodeJS and ExpressJS. It uses MongoDB as the database.<br>
 <br>
 To run the backend server, navigate to the directory and run the following commands:<br>
-`npm install`<br>
-`nodemon index.js`<br>
+```console 
+npm install
+nodemon index.js
+```
 <br>
 EvilBackend - Backend Server for Blind XSS<br>
 This backend acts as the server used by the bad actor to hunt for sesstion cookies. It is written in NodeJS and ExpressJS.<br>
 <br>
 To run the backend server, navigate to the directory and run the following commands:<br>
-`npm install`<br>
-`nodemon index.js`<br>
+```console 
+npm install
+nodemon index.js
+```
 <br>
 <br>
 NoSql - NoSQL Injection Attack<br>
