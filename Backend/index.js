@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     password: {
-        type: Number,
+        type: String,
         required: true,
     },
     isAdmin: {
@@ -47,13 +47,13 @@ console.log("Backend listen at port 5000");
 app.use(express.json());
 app.use(cors());
 
-// app.use(
-//     mongoSanitize({
-//       onSanitize: ({ req, key }) => {
-//         console.warn(`This request[${key}] is sanitized`);
-//       },
-//     }),
-//   );
+app.use(
+    mongoSanitize({
+      onSanitize: ({ req, key }) => {
+        console.warn(`This request[${key}] is sanitized`);
+      },
+    }),
+  );
 
 app.get("/", (req, resp) => {
     let dbStatus = false;
@@ -83,6 +83,7 @@ app.post("/signup", async (req, resp) => {
 
 app.post("/login", async (req, resp) => {
     const {email, password} = req.body;
+    console.log("response :",req.body);
     try {
         const user = await User.findOne({email: email, password:password}).exec();
 
@@ -164,48 +165,6 @@ app.post("/images", async (req, resp) => {
     try {
         const posts = await Image.find({user: req.body._id}).exec();
         return resp.json(posts);
-    } catch (e) {
-        console.log(e);
-        resp.send("Something Went Wrong");
-    }
-});
-
-app.delete("/delete", async (req, resp) => {
-    try {
-        const result = await Image.delete({_id: req.body.id}).exec();
-        resp.send(result);
-    } catch (e) {
-        console.log(e);
-        resp.send("Something Went Wrong");
-    }
-});
-
-app.get("/populate", async (req, resp) => {
-
-    try {
-        const result = await Image.insertMany(images);
-        resp.send(result);
-    }
-    catch (e) {
-        console.log(e);
-        resp.send("Something Went Wrong");
-    }
-});
-
-app.get("/clear", async (req, resp) => {
-    try {
-        const result = await Image.deleteMany({});
-        resp.send(result);
-    } catch (e) {
-        console.log(e);
-        resp.send("Something Went Wrong");
-    }
-});
-
-app.get("/hack", async (req, resp) => {
-    try {
-        resp.send(null);
-        console.log("Payload triggered\nResponse: " + req.query.cookie);
     } catch (e) {
         console.log(e);
         resp.send("Something Went Wrong");
