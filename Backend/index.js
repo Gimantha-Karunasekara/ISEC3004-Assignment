@@ -83,7 +83,6 @@ app.post("/signup", async (req, resp) => {
 
 app.post("/login", async (req, resp) => {
     const {email, password} = req.body;
-    console.log("response :",req.body);
     try {
         const user = await User.findOne({email: email, password:password}).exec();
 
@@ -151,7 +150,6 @@ app.post("/create", async (req, resp) => {
         let result = await image.save();
         result = result.toObject();
         resp.send(req.body);
-        console.log(result);
  
     } catch (e) {
         console.log(e);
