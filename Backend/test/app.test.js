@@ -121,7 +121,7 @@ describe('NoSQL Injection Test', function () {
 
   it('should prevent NoSQL injection', async function () {
 
-    const maliciousInput = { email: {"$ne": null}, password: 'pass' }
+    const maliciousInput = { email: {"$ne": null}, password: {"$ne": null} }
 
     const res = await chai
       .request(baseUrl)
