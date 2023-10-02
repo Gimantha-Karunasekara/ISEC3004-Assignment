@@ -98,12 +98,11 @@ const login = async () => {
                     body: JSON.stringify({email: email, password: password})
                 });
 
+        const data = await res.json();
         if (res.status !== 200) {
-            alert('Invalid Credentials');
+            alert(data.err);
         }
         else{
-            const data = await res.json();
-
             document.cookie = `token=${data.token}; path=/; max-age=86400`;
 
             window.location.href = 'http://localhost:5500/home.html';
@@ -133,11 +132,12 @@ const signup = async () => {
                     body: JSON.stringify({name: name, email: email, password: password})
                 });
     
+        const data = await res.json();
+
         if (res.status !== 201) {
-            alert('Invalid Credentials');
+            alert(data.err);
         }
         else{
-            const data = await res.json();
     
             document.cookie = `token=${data.token}; path=/; max-age=86400`;
     
@@ -146,8 +146,6 @@ const signup = async () => {
     } catch (error) {
         console.log(error);
     }
-
-   
     removeLoading();
 }
 

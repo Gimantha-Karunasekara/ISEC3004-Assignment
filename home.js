@@ -95,7 +95,16 @@ const addImage = async () => {
           },
           body: JSON.stringify({img: link ,user: curUser._id})
         })
-        .then(res => res.json())
+        .then(res => {
+          const resp = res.json()
+          if (res.status !== 200) {
+            alert(resp.err);
+            return;
+          }
+          else{
+            return resp;
+          };
+        })
         .then(data => {
           initialize();
         })

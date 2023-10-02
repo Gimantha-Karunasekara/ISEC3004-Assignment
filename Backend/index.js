@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
-const mongoSanitize = require('express-mongo-sanitize');
 const jwt = require('jsonwebtoken');
+
+const mongoSanitize = require('express-mongo-sanitize');
+
+const { JSDOM } = require('jsdom');
+const window = new JSDOM('').window;
+const DOMPurify = require('dompurify')(window);
+
 mongoose.connect('mongodb+srv://gimantha2003:tx69kuZgdNx40SOO@cluster0.nx75kk0.mongodb.net/ISEC3004?retryWrites=true&w=majority');
  
 
@@ -55,6 +61,35 @@ app.use(
     }),
   );
 
+
+app.use((req, res, next) => {
+  // Sanitize request body (assuming it's JSON)
+  if (req.body) {
+    req.body = sanitizeInput(req.body);
+  }
+
+  // Continue to the next middleware or route handler
+  next();
+});
+
+
+  const sanitizeInput = (data) => {
+    if (typeof data === 'object') {
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          data[key] = sanitizeInput(data[key]);
+        }
+      }
+    } else if (typeof data === 'string') {
+      return DOMPurify.sanitize(data);
+    }
+  
+    return data;
+  }
+  
+
+
+
 app.get("/", (req, resp) => {
     let dbStatus = false;
     if (mongoose.connection.readyState === 1) {
@@ -77,7 +112,7 @@ app.post("/signup", async (req, resp) => {
  
     } catch (e) {
         console.log(e);
-        resp.status(400).json({err: "Error occurred"});
+        resp.status(500).json({err: e.message});
     }
 });
 
@@ -87,7 +122,7 @@ app.post("/login", async (req, resp) => {
         const user = await User.findOne({email: email, password:password}).exec();
 
         if (user === null) {
-            throw new Error("Invalid email or password");
+            return resp.status(401).json({err: "Invalid email or password"});
         }
 
         // generate session token
@@ -97,7 +132,7 @@ app.post("/login", async (req, resp) => {
         return resp.json({...user._doc, token: `Bearer ${token}`});
     } catch (e) {
         console.log(e);
-        resp.status(400).json({err: "Invalid email or password"});
+        return resp.status(500).json({err: e.message});
     }
 });
 
@@ -106,11 +141,16 @@ app.get("/user", async (req, resp) => {
         const token = req.header('auth-token');
         const decoded = jwt.verify(token, "thisIsASecretKey");
         const user = await User.findOne({_id: decoded._id}).exec();
+
+        if (user === null) {
+            resp.status(404).josn({err: "User not found"});
+        }
+
         delete user.password;
         return resp.json(user);
     } catch (e) {
         console.log(e);
-        resp.status(400).json({err: "Invalid email or password"});
+        resp.status(500).json({err: e.message});
     }
 });
 
@@ -122,7 +162,7 @@ app.get("/users", async (req, resp) => {
         return resp.json(users);
     } catch (e) {
         console.log(e);
-        resp.status(400).json({err: "Invalid email or password"});
+        resp.status(500).json({err: e.message});
     }
 });
 
@@ -134,38 +174,34 @@ app.delete("/deleteUser", async (req, resp) => {
         await User.deleteOne({_id: req.body.id}).exec();
         await Image.deleteMany({user: req.body.id}).exec();
         resp.status(200).send({result: "success"});
-    } catch (error) {
-        resp.status(500).send(error);
-        console.log(error); 
+    } catch (e) {
+        resp.status(500).send({err: e.message});
+        console.log(e); 
     }
     
 });
-
-
-
 
 app.post("/create", async (req, resp) => {
     try {
         const image = new Image(req.body);
         let result = await image.save();
         result = result.toObject();
-        resp.send(req.body);
+        resp.status(201).send(req.body);
  
     } catch (e) {
         console.log(e);
-        resp.send("Something Went Wrong");
+        resp.status(500).send({err: e.message});
     }
 });
 
 
 app.post("/images", async (req, resp) => {
-
     try {
         const posts = await Image.find({user: req.body._id}).exec();
         return resp.json(posts);
     } catch (e) {
         console.log(e);
-        resp.send("Something Went Wrong");
+        resp.status(500).send({err: e.message});
     }
 });
 

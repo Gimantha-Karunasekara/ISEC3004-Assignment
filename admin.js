@@ -39,6 +39,10 @@ const initialize = async () => {
 
     const usersData = await users.json();
 
+    if (users.status !== 200) {
+        alert(usersData.err);
+    }
+
     document.getElementById('users-container').innerHTML = usersData.map((user) => {
         return(`<div class="user-card bg-white rounded-lg shadow-lg w-1/2 m-5 flex justify-between items-center p-5">
                         <h2 class='text-xl font-bold my-2'>${user.name}</h2>
@@ -77,7 +81,7 @@ const deleteUser = async (id) => {
         if (res.ok) {
             initialize();
         }else {
-            alert('Something went wrong!');
+            alert(result.err);
             console.log(result);
         }
         
