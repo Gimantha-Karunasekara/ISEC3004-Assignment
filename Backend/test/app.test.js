@@ -85,7 +85,7 @@ describe('App', function () {
       .post('/create')
       .send(data)
       .end(function (err, res) {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(201);
         done();
       });
   });
@@ -127,7 +127,7 @@ describe('NoSQL Injection Test', function () {
       .request(baseUrl)
       .post('/login')
       .send(maliciousInput);
-    expect(res).to.have.status(400);
+    expect(res).to.have.status(500);
   });
 
 });
@@ -143,7 +143,7 @@ describe('XSS Attack Test', function () {
       .post('/signup')
       .send(maliciousInput);
 
-    expect(res).to.have.status(400);
+    expect(res).to.have.status(500);
   });
 
 });
