@@ -53,24 +53,24 @@ console.log("Backend listen at port 5000");
 app.use(express.json());
 app.use(cors());
 
-// app.use(
-//     mongoSanitize({
-//       onSanitize: ({ req, key }) => {
-//         console.warn(`This request[${key}] is sanitized`);
-//       },
-//     }),
-//   );
+app.use(
+    mongoSanitize({
+      onSanitize: ({ req, key }) => {
+        console.warn(`This request[${key}] is sanitized`);
+      },
+    }),
+  );
 
 
-// app.use((req, res, next) => {
-//   // Sanitize request body (assuming it's JSON)
-//   if (req.body) {
-//     req.body = sanitizeInput(req.body);
-//   }
+app.use((req, res, next) => {
+  // Sanitize request body (assuming it's JSON)
+  if (req.body) {
+    req.body = sanitizeInput(req.body);
+  }
 
-//   // Continue to the next middleware or route handler
-//   next();
-// });
+  // Continue to the next middleware or route handler
+  next();
+});
 
 
   const sanitizeInput = (data) => {
@@ -111,7 +111,6 @@ app.post("/signup", async (req, resp) => {
         return resp.status(201).json({...result, token: `Bearer ${token}`});
  
     } catch (e) {
-        console.log(e);
         resp.status(500).json({err: e.message});
     }
 });
@@ -131,7 +130,6 @@ app.post("/login", async (req, resp) => {
         delete user.password;
         return resp.json({...user._doc, token: `Bearer ${token}`});
     } catch (e) {
-        console.log(e);
         return resp.status(500).json({err: e.message});
     }
 });
@@ -149,7 +147,6 @@ app.get("/user", async (req, resp) => {
         delete user.password;
         return resp.json(user);
     } catch (e) {
-        console.log(e);
         resp.status(500).json({err: e.message});
     }
 });
@@ -161,7 +158,6 @@ app.get("/users", async (req, resp) => {
         const users = await User.find({}).exec();
         return resp.json(users);
     } catch (e) {
-        console.log(e);
         resp.status(500).json({err: e.message});
     }
 });
@@ -176,7 +172,6 @@ app.delete("/deleteUser", async (req, resp) => {
         resp.status(200).send({result: "success"});
     } catch (e) {
         resp.status(500).send({err: e.message});
-        console.log(e); 
     }
     
 });
@@ -189,7 +184,6 @@ app.post("/create", async (req, resp) => {
         resp.status(201).send(req.body);
  
     } catch (e) {
-        console.log(e);
         resp.status(500).send({err: e.message});
     }
 });
@@ -200,7 +194,6 @@ app.post("/images", async (req, resp) => {
         const posts = await Image.find({user: req.body._id}).exec();
         return resp.json(posts);
     } catch (e) {
-        console.log(e);
         resp.status(500).send({err: e.message});
     }
 });
