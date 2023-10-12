@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const mongoSanitize = require('express-mongo-sanitize');
 
@@ -7,9 +8,7 @@ const { JSDOM } = require('jsdom');
 const window = new JSDOM('').window;
 const DOMPurify = require('dompurify')(window);
 
-mongoose.connect('mongodb+srv://gimantha2003:tx69kuZgdNx40SOO@cluster0.nx75kk0.mongodb.net/ISEC3004?retryWrites=true&w=majority');
- 
-
+mongoose.connect(process.env.MONGO_URL);
 
 const ImageSchema = new mongoose.Schema({
     user: {
