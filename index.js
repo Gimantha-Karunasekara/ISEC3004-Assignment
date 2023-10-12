@@ -85,8 +85,11 @@ const login = async () => {
     setLoading();
 
     try {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+
+        // email = DOMPurify.sanitize(email);
+        // password = DOMPurify.sanitize(password);
 
         console.log(email, password);
 
@@ -108,7 +111,7 @@ const login = async () => {
             window.location.href = 'http://localhost:5500/home.html';
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
     removeLoading();
@@ -120,9 +123,15 @@ const signup = async () => {
     setLoading();
 
     try {
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        let name = document.getElementById('name').value;
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+
+        // email = DOMPurify.sanitize(email);
+        // password = DOMPurify.sanitize(password);
+        // name = DOMPurify.sanitize(name);
+
+        console.log(name);
     
         const res = await fetch('http://localhost:5000/signup', {
                     method: 'POST',
@@ -144,7 +153,7 @@ const signup = async () => {
             window.location.href = 'http://localhost:5500/home.html';
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
     removeLoading();
 }
