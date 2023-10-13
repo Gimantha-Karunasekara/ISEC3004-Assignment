@@ -6,7 +6,7 @@ This is a repository for ISEC3004 Assignment. The assignment focuses on demostra
 <br>
 #### index.html - Main page for the website<br>
 #### Backend - Backend Server
-This backend acts as a server for the website. It is written in NodeJS and ExpressJS. It uses MongoDB as the database.<br>
+This backend acts as a server for the website. It is written in JavasScript using NodeJS runtime environment and ExpressJS framework. It uses MongoDB as the database.<br>
 To run the backend server, navigate to the directory and run the following commands:<br>
   
 ```console
@@ -16,7 +16,7 @@ nodemon index.js
 <b>Make sure to replace the mongoose.connect the URL with your mongoDB URL by specifying MONGO_URL value in .env file.</b>
 
 #### EvilBackend - Backend Server for Blind XSS<br>
-This backend acts as the server used by the bad actor to hunt for sesstion cookies. It is written in NodeJS and ExpressJS.<br>
+This backend acts as the server used by the bad actor to hunt for sesstion cookies. It is written in JavasScript using NodeJS runtime environment and ExpressJS framework.<br>
 To run the backend server, navigate to the directory and run the following commands:<be>
 
 ```console 
