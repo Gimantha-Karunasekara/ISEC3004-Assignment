@@ -51,3 +51,7 @@ When a user account is created with a XSS payload as the user such as: <br>
 ```
 <br>
 The payload will be executed when the Administrator of the system loads the admin page. The invalid source url will cause an error and execute the XSS payload in onerror attribute. The payload will send the session cookie to the bad actor's server. The EvilBackend server will then display the session cookie on the page and send a Email to the bad actor as a notification.<br>
+
+Administrator account credentials:<br>
+Email: gimantha@gmail.com
+Password: 123
