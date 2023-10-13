@@ -11,6 +11,7 @@ const nodeMailer = require('nodemailer');
 const port = 5001;
 const app = express();
 console.log("EvilServer listen at port "+port);
+console.log("Make sure to edit the EMAIL_TO in .env file with your email to recive notification");
 app.use(express.json());
 app.use(cors());
 
